@@ -36,3 +36,6 @@ yarn-error.log*
 next-env.d.ts
 # Personal source material — never commit
 /Screenshot*.png
+/.playwright-mcp/
+/home.jpeg
+/about.jpeg
