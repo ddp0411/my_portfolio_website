@@ -1,0 +1,47 @@
+---
+title: "Stock Price Prediction"
+publishedAt: "2024-05-20"
+summary: "LSTM-based financial time-series forecasting with 88.60% directional accuracy."
+images:
+  - "/images/projects/stock-price-prediction/cover-01.jpg"
+team:
+  - name: "Devanshu Vijay Patil"
+    role: "Developer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/devanshu-patil-8618b3222/"
+link: "https://github.com/ddp0411/stock_price_prediction"
+---
+
+## Overview
+
+A deep-learning project that forecasts stock prices from historical equity
+time-series data, framed around predicting the *direction* of the next move
+rather than just an absolute price.
+
+## Problem
+
+Stock prices are noisy and non-stationary — their statistical properties drift
+over time, which breaks naive models and makes honest evaluation tricky (it's
+easy to leak future information into the past).
+
+## Approach
+
+- Built an **LSTM-based** forecasting model on historical equity data
+- Handled the non-stationarity of the price series
+- Used **sliding-window** sequence generation with train/test splits that
+  respect temporal order — no look-ahead leakage
+- Packaged the whole thing as a modular Python pipeline
+
+## Results
+
+Achieved **88.60% directional accuracy** on held-out data — correctly calling
+the direction of the next price movement.
+
+## Tech stack
+
+Python · TensorFlow / Keras (LSTM) · pandas · NumPy
+{/* TODO: confirm framework (TensorFlow/Keras vs PyTorch) and which equity/index + date range */}
+
+## Links
+
+- [GitHub repository](https://github.com/ddp0411/stock_price_prediction)

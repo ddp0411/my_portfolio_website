@@ -2,55 +2,49 @@ import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/
 import { Line, Row, Text } from "@once-ui-system/core";
 
 const person: Person = {
-  firstName: "Selene",
-  lastName: "Yu",
-  name: `Selene Yu`,
-  role: "Design Engineer",
+  firstName: "Devanshu",
+  lastName: "Patil",
+  name: `Devanshu Vijay Patil`,
+  role: "Data Scientist",
   avatar: "/images/avatar.jpg",
-  email: "example@gmail.com",
-  location: "Asia/Jakarta", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
-  languages: ["English", "Bahasa"], // optional: Leave the array empty if you don't want to display languages
-  locale: "en", // BCP 47 language tag for the HTML lang attribute, e.g., 'en', 'ja', 'zh-TW'
+  email: "devanshupatil1712@gmail.com",
+  location: "Asia/Kolkata", // Pune, India — IANA zone powers the header clock
+  languages: ["English", "Hindi", "Marathi"],
+  locale: "en", // BCP 47 language tag for the HTML lang attribute
 };
 
 const newsletter: Newsletter = {
-  display: true,
+  display: false, // no mailing list — keep hidden
   title: <>Subscribe to {person.firstName}'s Newsletter</>,
-  description: <>My weekly newsletter about creativity and engineering</>,
+  description: <>My newsletter about data science and engineering</>,
 };
 
 const social: Social = [
   // Links are automatically displayed.
-  // Import new icons in /once-ui/icons.ts
-  // Set essentials: true for links you want to show on the about page
+  // Import new icons in /src/resources/icons.ts
+  // Set essential: true for links you want to show on the about page
   {
     name: "GitHub",
     icon: "github",
-    link: "https://github.com/once-ui-system",
+    link: "https://github.com/ddp0411",
     essential: true,
   },
   {
     name: "LinkedIn",
     icon: "linkedin",
-    link: "https://www.linkedin.com/company/once-ui/",
-    essential: true,
-  },
-  {
-    name: "Instagram",
-    icon: "instagram",
-    link: "https://www.instagram.com/once_ui/",
-    essential: false,
-  },
-  {
-    name: "Threads",
-    icon: "threads",
-    link: "https://www.threads.com/@once_ui",
+    link: "https://www.linkedin.com/in/devanshu-patil-8618b3222/",
     essential: true,
   },
   {
     name: "Email",
     icon: "email",
     link: `mailto:${person.email}`,
+    essential: true,
+  },
+  {
+    name: "Resume",
+    icon: "document",
+    link: "/devanshu-patil-resume.pdf",
     essential: true,
   },
 ];
@@ -61,24 +55,25 @@ const home: Home = {
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Building bridges between design and code</>,
+  headline: <>Transforming data into decisions</>,
   featured: {
     display: true,
     title: (
       <Row gap="12" vertical="center">
-        <strong className="ml-4">Once UI</strong>{" "}
+        <strong className="ml-4">Featured</strong>{" "}
         <Line background="brand-alpha-strong" vert height="20" />
         <Text marginRight="4" onBackground="brand-medium">
-          Featured work
+          Overspeed Detection System
         </Text>
       </Row>
     ),
-    href: "/work/building-once-ui-a-customizable-design-system",
+    href: "/work/advanced-overspeed-detection-system",
   },
   subline: (
     <>
-      I'm {person.firstName}, a {person.role.toLowerCase()} at{" "}
-      <Text as="span" size="xl" weight="strong">ONCE UI</Text>, where I craft intuitive <br /> user experiences. After hours, I build my own projects.
+      I'm {person.firstName}, a {person.role.toLowerCase()} who turns complex datasets into clear,
+      actionable insights — through machine learning, NLP, and generative AI, from data pipeline to
+      deployed interface.
     </>
   ),
 };
@@ -96,7 +91,7 @@ const about: About = {
     display: true,
   },
   calendar: {
-    display: true,
+    display: false, // no Cal.com/Calendly link
     link: "https://cal.com",
   },
   intro: {
@@ -104,52 +99,79 @@ const about: About = {
     title: "Introduction",
     description: (
       <>
-        {person.firstName} is a {person.location.split("/")[1]?.replace("_", " ")}-based {person.role.toLowerCase()} with a passion for transforming complex challenges
-        into simple, elegant design solutions. Their work spans digital interfaces, interactive
-        experiences, and the convergence of design and technology.
+        I'm a computer engineer with a passion for data science, focused on transforming data into
+        actionable insights. Over the past few years I've built and deployed Python applications with
+        hands-on exposure to machine learning, NLP, and generative AI (RAG systems) — developing
+        skills across data analysis, machine learning, visualization, and agentic AI through
+        internships and projects.
+        <br />
+        <br />
+        What draws me to data science is the ability to uncover patterns and solve real-world
+        problems. I'm excited about using data to drive smarter decisions and make a positive impact
+        across industries.
+        <br />
+        <br />
+        Outside of academics, I enjoy working on collaborative projects and staying up to date with
+        the latest trends in the field.
       </>
     ),
   },
   work: {
-    display: true, // set to false to hide this section
+    display: true,
     title: "Work Experience",
     experiences: [
       {
-        company: "FLY",
-        timeframe: "2022 - Present",
-        role: "Senior Design Engineer",
+        company: "Freelance",
+        timeframe: "Apr 2026 – Jul 2026",
+        role: "AI Software Developer",
         achievements: [
           <>
-            Redesigned the UI/UX for the FLY platform, resulting in a 20% increase in user
-            engagement and 30% faster load times.
-          </>,
-          <>
-            Spearheaded the integration of AI tools into design workflows, enabling designers to
-            iterate 50% faster.
+            Building AI-native industrial software that leverages IoT and AI, using technologies such
+            as Node.js and PostgreSQL.
           </>,
         ],
-        images: [
-          // optional: leave the array empty if you don't want to display images
-          {
-            src: "/images/projects/project-01/cover-01.jpg",
-            alt: "Once UI Project",
-            width: 16,
-            height: 9,
-          },
-        ],
+        images: [],
       },
       {
-        company: "Creativ3",
-        timeframe: "2018 - 2022",
-        role: "Lead Designer",
+        company: "Project Studio, Bangalore",
+        timeframe: "Nov 2025 – Mar 2026",
+        role: "Data Analytics Intern",
         achievements: [
           <>
-            Developed a design system that unified the brand across multiple platforms, improving
-            design consistency by 40%.
+            Worked on Apache Superset and Metabase for SQL-based data analysis and dashboard/chart
+            creation.
+          </>,
+          <>Developed and deployed end-to-end automation workflows using n8n.</>,
+          <>Gained exposure to the APITemplate platform for automated PDF generation.</>,
+        ],
+        images: [],
+      },
+      {
+        company: "QnQ Solutions",
+        timeframe: "Jun 2025 – Nov 2025",
+        role: "Freelance Data Analyst",
+        achievements: [
+          <>
+            Built an end-to-end manufacturing analytics solution in Power BI to evaluate
+            profitability, optimize inventory, and improve production efficiency through OEE, revenue,
+            and process-variability (MAPE) analysis.
           </>,
           <>
-            Led a cross-functional team to launch a new product line, contributing to a 15% increase
-            in overall company revenue.
+            Analyzed a multi-sheet manufacturing and sales dataset and delivered shift-wise
+            comparisons to improve employee efficiency.
+          </>,
+        ],
+        images: [],
+      },
+      {
+        company: "Corizo",
+        timeframe: "Jan 2024 – Apr 2024",
+        role: "Data Science Intern",
+        achievements: [
+          <>Contributed across all stages of the data-analysis workflow.</>,
+          <>Used Python, R, and SQL for data collection, cleaning, and interpretation.</>,
+          <>
+            Created visualizations with Matplotlib and Seaborn to communicate insights effectively.
           </>,
         ],
         images: [],
@@ -157,78 +179,110 @@ const about: About = {
     ],
   },
   studies: {
-    display: true, // set to false to hide this section
+    display: true,
     title: "Studies",
     institutions: [
       {
-        name: "University of Jakarta",
-        description: <>Studied software engineering.</>,
+        name: "IIT Madras",
+        description: <>B.S. in Data Science and its Applications (2023 – present).</>,
       },
       {
-        name: "Build the Future",
-        description: <>Studied online marketing and personal branding.</>,
+        name: "Zeal College of Engineering and Research (SPPU)",
+        description: <>B.E. in Computer Engineering (2021 – 2025) · SGPA 8.53.</>,
       },
     ],
   },
   technical: {
-    display: true, // set to false to hide this section
+    display: true,
     title: "Technical skills",
     skills: [
       {
-        title: "Figma",
+        title: "Machine Learning & Deep Learning",
         description: (
-          <>Able to prototype in Figma with Once UI with unnatural speed.</>
+          <>
+            Building and training predictive and deep-learning models — from classical ML with
+            scikit-learn to neural networks (including LSTMs) in TensorFlow, Keras, and PyTorch.
+          </>
         ),
         tags: [
-          {
-            name: "Figma",
-            icon: "figma",
-          },
+          { name: "Python", icon: "python" },
+          { name: "scikit-learn", icon: "scikitlearn" },
+          { name: "TensorFlow", icon: "tensorflow" },
+          { name: "Keras" },
+          { name: "PyTorch" },
+          { name: "NumPy" },
         ],
-        // optional: leave the array empty if you don't want to display images
-        images: [
-          {
-            src: "/images/projects/project-01/cover-02.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
-          {
-            src: "/images/projects/project-01/cover-03.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
-        ],
+        images: [],
       },
       {
-        title: "Next.js",
+        title: "Generative & Agentic AI",
         description: (
-          <>Building next gen apps with Next.js + Once UI + Supabase.</>
+          <>
+            Building LLM-powered applications — including Retrieval-Augmented Generation (RAG)
+            systems with semantic embeddings, vector search, and retrieval reranking.
+          </>
         ),
         tags: [
-          {
-            name: "JavaScript",
-            icon: "javascript",
-          },
-          {
-            name: "Next.js",
-            icon: "nextjs",
-          },
-          {
-            name: "Supabase",
-            icon: "supabase",
-          },
+          { name: "Python", icon: "python" },
+          { name: "OpenAI", icon: "openai" },
+          { name: "LangChain" },
+          { name: "RAG" },
+          { name: "NLTK" },
         ],
-        // optional: leave the array empty if you don't want to display images
-        images: [
-          {
-            src: "/images/projects/project-01/cover-04.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
+        images: [],
+      },
+      {
+        title: "Data Analysis & Visualization",
+        description: (
+          <>
+            Exploring and analysing data with pandas, and communicating findings through Power BI and
+            Tableau dashboards and Matplotlib/Seaborn charts.
+          </>
+        ),
+        tags: [
+          { name: "pandas", icon: "pandas" },
+          { name: "Power BI" },
+          { name: "Tableau", icon: "tableau" },
+          { name: "Matplotlib" },
+          { name: "Seaborn" },
         ],
+        images: [],
+      },
+      {
+        title: "Databases",
+        description: <>Designing and querying relational and document databases.</>,
+        tags: [
+          { name: "MySQL", icon: "mysql" },
+          { name: "MongoDB", icon: "mongodb" },
+        ],
+        images: [],
+      },
+      {
+        title: "Cloud & DevOps",
+        description: (
+          <>
+            Deploying and versioning work across AWS, Azure, and Google Cloud with Git, Docker, and
+            CI/CD via GitHub Actions.
+          </>
+        ),
+        tags: [
+          { name: "AWS", icon: "aws" },
+          { name: "Azure" },
+          { name: "GCP", icon: "gcp" },
+          { name: "Git", icon: "git" },
+          { name: "Docker" },
+        ],
+        images: [],
+      },
+      {
+        title: "Web",
+        description: <>Building interfaces and portfolio work with the web fundamentals.</>,
+        tags: [
+          { name: "HTML", icon: "html" },
+          { name: "CSS", icon: "css" },
+          { name: "JavaScript", icon: "javascript" },
+        ],
+        images: [],
       },
     ],
   },
@@ -237,19 +291,17 @@ const about: About = {
 const blog: Blog = {
   path: "/blog",
   label: "Blog",
-  title: "Writing about design and tech...",
+  title: "Writing about data and tech...",
   description: `Read what ${person.name} has been up to recently`,
   // Create new blog posts by adding a new .mdx file to app/blog/posts
-  // All posts will be listed on the /blog route
 };
 
 const work: Work = {
   path: "/work",
   label: "Work",
   title: `Projects – ${person.name}`,
-  description: `Design and dev projects by ${person.name}`,
-  // Create new project pages by adding a new .mdx file to app/blog/posts
-  // All projects will be listed on the /home and /work routes
+  description: `Data science and engineering projects by ${person.name}`,
+  // Create new project pages by adding a new .mdx file to app/work/projects
 };
 
 const gallery: Gallery = {
@@ -257,50 +309,7 @@ const gallery: Gallery = {
   label: "Gallery",
   title: `Photo gallery – ${person.name}`,
   description: `A photo collection by ${person.name}`,
-  // Images by https://lorant.one
-  // These are placeholder images, replace with your own
-  images: [
-    {
-      src: "/images/gallery/horizontal-1.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/vertical-4.jpg",
-      alt: "image",
-      orientation: "vertical",
-    },
-    {
-      src: "/images/gallery/horizontal-3.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/vertical-1.jpg",
-      alt: "image",
-      orientation: "vertical",
-    },
-    {
-      src: "/images/gallery/vertical-2.jpg",
-      alt: "image",
-      orientation: "vertical",
-    },
-    {
-      src: "/images/gallery/horizontal-2.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/horizontal-4.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/vertical-3.jpg",
-      alt: "image",
-      orientation: "vertical",
-    },
-  ],
+  images: [],
 };
 
 export { person, social, newsletter, home, about, blog, work, gallery };

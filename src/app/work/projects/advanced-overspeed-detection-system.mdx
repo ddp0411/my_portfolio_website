@@ -1,0 +1,46 @@
+---
+title: "Advanced Overspeed Detection System"
+publishedAt: "2025-03-15"
+summary: "Real-time vehicle speed estimation using YOLOv8, OCR, and dual-camera analytics."
+images:
+  - "/images/projects/advanced-overspeed-detection-system/cover-01.jpg"
+team:
+  - name: "Devanshu Vijay Patil"
+    role: "Developer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/devanshu-patil-8618b3222/"
+link: "https://github.com/ddp0411/overspeed_detection_project"
+---
+
+## Overview
+
+A real-time computer-vision system that detects vehicles in traffic footage,
+reads their number plates, and estimates their speed — flagging vehicles that
+exceed the limit. This work is backed by two published research papers.
+
+## Problem
+
+Manual speed enforcement doesn't scale, and estimating speed reliably from
+ordinary video is hard: vehicles change size with perspective, occlude one
+another, and move fast between frames.
+
+## Approach
+
+- Vehicle detection with a **YOLOv8** (You Only Look Once) model
+- **Optical Character Recognition (OCR)** to read number plates
+- **Dual-camera analytics** to estimate speed from the time and distance between
+  camera crossings
+- A **Streamlit** front-end for an interactive GUI
+
+## Results
+
+{/* TODO: add detection accuracy / speed-estimation error / FPS if you have them */}
+Published in two peer-reviewed papers — see the [Published Research](/work/publications) entry.
+
+## Tech stack
+
+Python · YOLOv8 · OpenCV · OCR · Streamlit
+
+## Links
+
+- [GitHub repository](https://github.com/ddp0411/overspeed_detection_project)
