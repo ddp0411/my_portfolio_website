@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import { Fade, Flex, Line, Row, ToggleButton } from "@once-ui-system/core";
 
-import { routes, display, person, about, blog, work, gallery } from "@/resources";
+import { routes, display, person, about, blog, work, projects, publications, gallery } from "@/resources";
 import { ThemeToggle } from "./ThemeToggle";
 import styles from "./Header.module.scss";
 
@@ -113,17 +113,55 @@ export const Header = () => {
                 <>
                   <Row s={{ hide: true }}>
                     <ToggleButton
-                      prefixIcon="grid"
+                      prefixIcon="briefcase"
                       href="/work"
                       label={work.label}
-                      selected={pathname.startsWith("/work")}
+                      selected={pathname === "/work"}
+                    />
+                  </Row>
+                  <Row hide s={{ hide: false }}>
+                    <ToggleButton
+                      prefixIcon="briefcase"
+                      href="/work"
+                      selected={pathname === "/work"}
+                    />
+                  </Row>
+                </>
+              )}
+              {routes["/projects"] && (
+                <>
+                  <Row s={{ hide: true }}>
+                    <ToggleButton
+                      prefixIcon="grid"
+                      href="/projects"
+                      label={projects.label}
+                      selected={pathname.startsWith("/projects")}
                     />
                   </Row>
                   <Row hide s={{ hide: false }}>
                     <ToggleButton
                       prefixIcon="grid"
-                      href="/work"
-                      selected={pathname.startsWith("/work")}
+                      href="/projects"
+                      selected={pathname.startsWith("/projects")}
+                    />
+                  </Row>
+                </>
+              )}
+              {routes["/publications"] && (
+                <>
+                  <Row s={{ hide: true }}>
+                    <ToggleButton
+                      prefixIcon="book"
+                      href="/publications"
+                      label={publications.label}
+                      selected={pathname.startsWith("/publications")}
+                    />
+                  </Row>
+                  <Row hide s={{ hide: false }}>
+                    <ToggleButton
+                      prefixIcon="book"
+                      href="/publications"
+                      selected={pathname.startsWith("/publications")}
                     />
                   </Row>
                 </>

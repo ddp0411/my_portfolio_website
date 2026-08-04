@@ -14,9 +14,14 @@ const person: Person = {
 };
 
 const newsletter: Newsletter = {
-  display: false, // no mailing list — keep hidden
-  title: <>Subscribe to {person.firstName}'s Newsletter</>,
-  description: <>My newsletter about data science and engineering</>,
+  display: true,
+  title: <>Stay in the loop</>,
+  description: (
+    <>
+      Occasional notes from {person.firstName} on data science, machine learning, and building AI
+      products — no spam.
+    </>
+  ),
 };
 
 const social: Social = [
@@ -67,7 +72,7 @@ const home: Home = {
         </Text>
       </Row>
     ),
-    href: "/work/advanced-overspeed-detection-system",
+    href: "/projects/advanced-overspeed-detection-system",
   },
   subline: (
     <>
@@ -298,12 +303,28 @@ const blog: Blog = {
   // Create new blog posts by adding a new .mdx file to app/blog/posts
 };
 
+// "Work" tab = professional & academic experience (reuses about.work + about.studies data)
 const work: Work = {
   path: "/work",
   label: "Work",
+  title: `Work Experience – ${person.name}`,
+  description: `Professional and academic experience of ${person.name}`,
+};
+
+// "Projects" tab = project case studies (.mdx files in app/projects/projects)
+const projects: Work = {
+  path: "/projects",
+  label: "Projects",
   title: `Projects – ${person.name}`,
   description: `Data science and engineering projects by ${person.name}`,
-  // Create new project pages by adding a new .mdx file to app/work/projects
+};
+
+// "Publications" tab = peer-reviewed papers
+const publications: Work = {
+  path: "/publications",
+  label: "Publications",
+  title: `Publications – ${person.name}`,
+  description: `Peer-reviewed research published by ${person.name}`,
 };
 
 const gallery: Gallery = {
@@ -314,4 +335,4 @@ const gallery: Gallery = {
   images: [],
 };
 
-export { person, social, newsletter, home, about, blog, work, gallery };
+export { person, social, newsletter, home, about, blog, work, projects, publications, gallery };
