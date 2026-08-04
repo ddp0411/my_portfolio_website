@@ -158,6 +158,8 @@ export interface About extends BasePageConfig {
       role: string;
       /** Achievements at the company */
       achievements: React.ReactNode[];
+      /** Tech stack / tools used in this role */
+      tech?: string[];
       /** Images related to the experience */
       images?: Array<{
         /** Image source path */

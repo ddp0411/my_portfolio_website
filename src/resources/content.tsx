@@ -135,6 +135,7 @@ const about: About = {
             as Node.js and PostgreSQL.
           </>,
         ],
+        tech: ["Node.js", "PostgreSQL", "IoT", "AI"],
         images: [],
       },
       {
@@ -149,6 +150,7 @@ const about: About = {
           <>Developed and deployed end-to-end automation workflows using n8n.</>,
           <>Gained exposure to the APITemplate platform for automated PDF generation.</>,
         ],
+        tech: ["SQL", "Apache Superset", "Metabase", "n8n", "APITemplate"],
         images: [],
       },
       {
@@ -166,6 +168,7 @@ const about: About = {
             comparisons to improve employee efficiency.
           </>,
         ],
+        tech: ["Power BI", "Excel", "DAX"],
         images: [],
       },
       {
@@ -179,6 +182,7 @@ const about: About = {
             Created visualizations with Matplotlib and Seaborn to communicate insights effectively.
           </>,
         ],
+        tech: ["Python", "R", "SQL", "Matplotlib", "Seaborn"],
         images: [],
       },
     ],

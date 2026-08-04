@@ -1,4 +1,4 @@
-import { Column, Heading, Meta, Schema, Text, Row } from "@once-ui-system/core";
+import { Column, Flex, Heading, Meta, Schema, Tag, Text, Row } from "@once-ui-system/core";
 import { baseURL, about, person, work } from "@/resources";
 import React from "react";
 
@@ -12,7 +12,20 @@ export async function generateMetadata() {
   });
 }
 
+const dotStyle: React.CSSProperties = {
+  position: "absolute",
+  left: "-7px",
+  top: "4px",
+  width: "12px",
+  height: "12px",
+  borderRadius: "9999px",
+  background: "var(--brand-background-strong)",
+};
+
 export default function Work() {
+  const experiences = about.work.experiences;
+  const institutions = about.studies.institutions;
+
   return (
     <Column maxWidth="m" paddingTop="24">
       <Schema
@@ -37,48 +50,95 @@ export default function Work() {
 
       {about.work.display && (
         <>
-          <Heading as="h2" variant="display-strong-s" marginBottom="m">
+          <Heading as="h2" variant="display-strong-s" marginBottom="l">
             {about.work.title}
           </Heading>
-          <Column fillWidth gap="l" marginBottom="xl">
-            {about.work.experiences.map((experience, index) => (
-              <Column key={`${experience.company}-${experience.role}-${index}`} fillWidth>
-                <Row fillWidth horizontal="between" vertical="end" marginBottom="4">
-                  <Text variant="heading-strong-l">{experience.role}</Text>
-                  <Text variant="heading-default-xs" onBackground="neutral-weak">
-                    {experience.timeframe}
-                  </Text>
-                </Row>
-                <Text variant="body-default-s" onBackground="brand-weak" marginBottom="m">
-                  {experience.company}
-                </Text>
-                <Column as="ul" gap="16">
-                  {experience.achievements.map((achievement: React.ReactNode, idx: number) => (
-                    <Text as="li" variant="body-default-m" key={`${experience.company}-${idx}`}>
-                      {achievement}
+          <Column fillWidth marginBottom="xl">
+            {experiences.map((experience, index) => {
+              const isLast = index === experiences.length - 1;
+              return (
+                <Column
+                  key={`${experience.company}-${experience.role}-${index}`}
+                  fillWidth
+                  paddingLeft="32"
+                  paddingBottom={isLast ? undefined : "xl"}
+                  style={{
+                    position: "relative",
+                    borderLeft: `2px solid ${isLast ? "transparent" : "var(--neutral-alpha-medium)"}`,
+                  }}
+                >
+                  <Flex style={dotStyle} />
+                  <Row
+                    fillWidth
+                    horizontal="between"
+                    vertical="end"
+                    gap="12"
+                    marginBottom="4"
+                    s={{ direction: "column", horizontal: "start", align: "start" }}
+                  >
+                    <Text variant="heading-strong-l">{experience.role}</Text>
+                    <Text
+                      variant="heading-default-xs"
+                      onBackground="neutral-weak"
+                      style={{ whiteSpace: "nowrap" }}
+                    >
+                      {experience.timeframe}
                     </Text>
-                  ))}
+                  </Row>
+                  <Text variant="body-default-s" onBackground="brand-weak" marginBottom="m">
+                    {experience.company}
+                  </Text>
+                  <Column as="ul" gap="12">
+                    {experience.achievements.map((achievement: React.ReactNode, idx: number) => (
+                      <Text as="li" variant="body-default-m" key={`${experience.company}-${idx}`}>
+                        {achievement}
+                      </Text>
+                    ))}
+                  </Column>
+                  {experience.tech && experience.tech.length > 0 && (
+                    <Row wrap gap="8" paddingTop="16">
+                      {experience.tech.map((item, idx) => (
+                        <Tag key={`${experience.company}-tech-${idx}`} size="s">
+                          {item}
+                        </Tag>
+                      ))}
+                    </Row>
+                  )}
                 </Column>
-              </Column>
-            ))}
+              );
+            })}
           </Column>
         </>
       )}
 
       {about.studies.display && (
         <>
-          <Heading as="h2" variant="display-strong-s" marginBottom="m">
+          <Heading as="h2" variant="display-strong-s" marginBottom="l">
             {about.studies.title}
           </Heading>
-          <Column fillWidth gap="l">
-            {about.studies.institutions.map((institution, index) => (
-              <Column key={`${institution.name}-${index}`} fillWidth gap="4">
-                <Text variant="heading-strong-l">{institution.name}</Text>
-                <Text variant="heading-default-xs" onBackground="neutral-weak">
-                  {institution.description}
-                </Text>
-              </Column>
-            ))}
+          <Column fillWidth>
+            {institutions.map((institution, index) => {
+              const isLast = index === institutions.length - 1;
+              return (
+                <Column
+                  key={`${institution.name}-${index}`}
+                  fillWidth
+                  paddingLeft="32"
+                  paddingBottom={isLast ? undefined : "l"}
+                  gap="4"
+                  style={{
+                    position: "relative",
+                    borderLeft: `2px solid ${isLast ? "transparent" : "var(--neutral-alpha-medium)"}`,
+                  }}
+                >
+                  <Flex style={dotStyle} />
+                  <Text variant="heading-strong-l">{institution.name}</Text>
+                  <Text variant="heading-default-xs" onBackground="neutral-weak">
+                    {institution.description}
+                  </Text>
+                </Column>
+              );
+            })}
           </Column>
         </>
       )}
