@@ -1,7 +1,7 @@
 ---
-title: "NLP — Language Detection"
+title: "Language Detection & Translation"
 publishedAt: "2024-11-10"
-summary: "A natural-language-processing model that identifies the language of a given text."
+summary: "An NLP utility that auto-detects the language of any text and translates it into a chosen target language."
 images:
   - "/images/projects/nlp-langdetect/cover-01.jpg"
 team:
@@ -14,30 +14,29 @@ link: "https://github.com/ddp0411/nlp_langdetect"
 
 ## Overview
 
-A natural-language-processing model that classifies which language a short piece
-of text is written in.
+A lightweight natural-language-processing utility that automatically identifies
+the language a piece of text is written in and, when needed, translates it into
+a chosen target language.
 
 ## Problem
 
-{/* TODO: how many languages, the dataset, and where language detection is useful */}
-Language detection is a foundational step in most multilingual NLP pipelines —
-routing, translation, and moderation all depend on getting it right on short,
-noisy inputs.
+Multilingual applications constantly receive text in an unknown language.
+Before you can translate, moderate, or route that text, you first have to know
+what language it is — reliably and without asking the user.
 
 ## Approach
 
-{/* TODO: real pipeline — text preprocessing, vectorization (n-grams/TF-IDF?), model choice */}
-- Cleaned and tokenized the text corpus
-- Converted text to numerical features
-- Trained and evaluated a classification model
-
-## Results
-
-{/* TODO: real numbers — accuracy/F1, number of languages, confusion cases */}
+- Detects the source language of the input with the **`langdetect`** library
+- Wraps the whole flow in a single `detect_and_translate(text, target_language)`
+  function
+- Short-circuits when the detected language already matches the target — the
+  text is returned unchanged, avoiding a wasted translation call
+- Otherwise translates from the detected language into the target (for example,
+  English → Swahili) using a Google Translate wrapper
 
 ## Tech stack
 
-Python · scikit-learn · pandas
+Python · langdetect · googletrans
 
 ## Links
 

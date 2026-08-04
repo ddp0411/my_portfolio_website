@@ -1,0 +1,59 @@
+---
+title: "NeuroRAG"
+subtitle: "Retrieval-Augmented Generation over ICD-10 mental-health documentation"
+publishedAt: "2025-07-15"
+summary: "A fully offline RAG assistant that answers natural-language questions about ICD-10 mental-health diagnoses and their classification codes."
+images:
+  - "/images/projects/neurorag/cover-01.jpg"
+team:
+  - name: "Devanshu Vijay Patil"
+    role: "Developer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/devanshu-patil-8618b3222/"
+link: "https://github.com/ddp0411/NeuroRAG"
+---
+
+## Overview
+
+NeuroRAG is a **Retrieval-Augmented Generation (RAG)** assistant that answers
+natural-language questions about mental-health diagnoses and their **ICD-10**
+classification codes. It reads the official ICD-10 *Mental and Behavioural
+Disorders* documentation and returns grounded, context-aware answers — entirely
+offline, with no cloud APIs.
+
+## Problem
+
+Clinicians and researchers need fast, accurate access to ICD-10 diagnostic
+criteria and codes, but that information is buried in dense medical PDFs.
+Manual searching is slow, and general-purpose chatbots hallucinate codes.
+NeuroRAG grounds every answer in the source document.
+
+## Approach
+
+- **Ingestion:** extract text from the ICD-10 PDF with **PyMuPDF** and split it
+  into ~500-token chunks
+- **Embeddings:** encode chunks with **`all-MiniLM-L6-v2`** via
+  Sentence-Transformers
+- **Vector store:** index the dense vectors in **FAISS** for fast similarity
+  search
+- **Retrieval:** use **Maximum Marginal Relevance (MMR)** to fetch results that
+  are both relevant and diverse, improving answer grounding
+- **Generation:** feed the retrieved context to **Falcon-RW-1B** (HuggingFace
+  Transformers) to produce the final answer
+- **Interfaces:** a **Streamlit** web app and a **CLI**, with dynamic PDF upload
+  and query caching for faster repeat lookups
+
+## Why it matters
+
+Because it runs on open models and a local vector store, NeuroRAG is
+**privacy-preserving** — sensitive medical queries never leave the machine —
+while still delivering retrieval-grounded answers.
+
+## Tech stack
+
+Python · LangChain · Sentence-Transformers (all-MiniLM-L6-v2) · FAISS ·
+Falcon-RW-1B · HuggingFace Transformers · PyTorch · PyMuPDF · Streamlit
+
+## Links
+
+- [GitHub repository](https://github.com/ddp0411/NeuroRAG)

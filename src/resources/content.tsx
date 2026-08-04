@@ -227,6 +227,8 @@ const about: About = {
           { name: "OpenAI", icon: "openai" },
           { name: "LangChain" },
           { name: "RAG" },
+          { name: "FAISS" },
+          { name: "Hugging Face" },
           { name: "NLTK" },
         ],
         images: [],
