@@ -199,6 +199,14 @@ const about: About = {
         name: "Zeal College of Engineering and Research (SPPU)",
         description: <>B.E. in Computer Engineering (2021 – 2025) · SGPA 8.53.</>,
       },
+      {
+        name: "Rao Junior College of Science, Pune",
+        description: <>Higher Secondary Certificate (HSC), 2019 – 2021 · 92.67%.</>,
+      },
+      {
+        name: "Blue Ridge Public School, Pune",
+        description: <>ICSE / ISC (CISCE), 2011 – 2019 · 90%.</>,
+      },
     ],
   },
   technical: {
@@ -310,7 +318,7 @@ const blog: Blog = {
 // "Work" tab = professional & academic experience (reuses about.work + about.studies data)
 const work: Work = {
   path: "/work",
-  label: "Work",
+  label: "Work-Ex",
   title: `Work Experience – ${person.name}`,
   description: `Professional and academic experience of ${person.name}`,
 };
