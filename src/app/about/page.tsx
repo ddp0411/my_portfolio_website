@@ -2,6 +2,7 @@ import {
   Avatar,
   Button,
   Column,
+  Flex,
   Heading,
   Icon,
   IconButton,
@@ -16,6 +17,16 @@ import { baseURL, about, person, social } from "@/resources";
 import TableOfContents from "@/components/about/TableOfContents";
 import styles from "@/components/about/about.module.scss";
 import React from "react";
+
+const dotStyle: React.CSSProperties = {
+  position: "absolute",
+  left: "-7px",
+  top: "4px",
+  width: "12px",
+  height: "12px",
+  borderRadius: "9999px",
+  background: "var(--brand-background-strong)",
+};
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -207,56 +218,67 @@ export default function About() {
               <Heading as="h2" id={about.work.title} variant="display-strong-s" marginBottom="m">
                 {about.work.title}
               </Heading>
-              <Column fillWidth gap="l" marginBottom="40">
-                {about.work.experiences.map((experience, index) => (
-                  <Column key={`${experience.company}-${experience.role}-${index}`} fillWidth>
-                    <Row fillWidth horizontal="between" vertical="end" marginBottom="4">
-                      <Text id={experience.company} variant="heading-strong-l">
+              <Column fillWidth marginBottom="40">
+                {about.work.experiences.map((experience, index) => {
+                  const isLast = index === about.work.experiences.length - 1;
+                  return (
+                    <Column
+                      key={`${experience.company}-${experience.role}-${index}`}
+                      id={experience.company}
+                      fillWidth
+                      paddingLeft="32"
+                      paddingBottom={isLast ? undefined : "xl"}
+                      style={{
+                        position: "relative",
+                        borderLeft: `2px solid ${isLast ? "transparent" : "var(--neutral-alpha-medium)"}`,
+                      }}
+                    >
+                      <Flex style={dotStyle} />
+                      <Row
+                        fillWidth
+                        horizontal="between"
+                        vertical="end"
+                        gap="12"
+                        marginBottom="4"
+                        s={{ direction: "column", horizontal: "start", align: "start" }}
+                      >
+                        <Text variant="heading-strong-l">{experience.role}</Text>
+                        <Text
+                          variant="heading-default-xs"
+                          onBackground="neutral-weak"
+                          style={{ whiteSpace: "nowrap" }}
+                        >
+                          {experience.timeframe}
+                        </Text>
+                      </Row>
+                      <Text variant="body-default-s" onBackground="brand-weak" marginBottom="m">
                         {experience.company}
                       </Text>
-                      <Text variant="heading-default-xs" onBackground="neutral-weak">
-                        {experience.timeframe}
-                      </Text>
-                    </Row>
-                    <Text variant="body-default-s" onBackground="brand-weak" marginBottom="m">
-                      {experience.role}
-                    </Text>
-                    <Column as="ul" gap="16">
-                      {experience.achievements.map(
-                        (achievement: React.ReactNode, index: number) => (
-                          <Text
-                            as="li"
-                            variant="body-default-m"
-                            key={`${experience.company}-${index}`}
-                          >
-                            {achievement}
-                          </Text>
-                        ),
+                      <Column as="ul" gap="12">
+                        {experience.achievements.map(
+                          (achievement: React.ReactNode, idx: number) => (
+                            <Text
+                              as="li"
+                              variant="body-default-m"
+                              key={`${experience.company}-${idx}`}
+                            >
+                              {achievement}
+                            </Text>
+                          ),
+                        )}
+                      </Column>
+                      {experience.tech && experience.tech.length > 0 && (
+                        <Row wrap gap="8" paddingTop="16">
+                          {experience.tech.map((item, idx) => (
+                            <Tag key={`${experience.company}-tech-${idx}`} size="s">
+                              {item}
+                            </Tag>
+                          ))}
+                        </Row>
                       )}
                     </Column>
-                    {experience.images && experience.images.length > 0 && (
-                      <Row fillWidth paddingTop="m" paddingLeft="40" gap="12" wrap>
-                        {experience.images.map((image, index) => (
-                          <Row
-                            key={index}
-                            border="neutral-medium"
-                            radius="m"
-                            minWidth={image.width}
-                            height={image.height}
-                          >
-                            <Media
-                              enlarge
-                              radius="m"
-                              sizes={image.width.toString()}
-                              alt={image.alt}
-                              src={image.src}
-                            />
-                          </Row>
-                        ))}
-                      </Row>
-                    )}
-                  </Column>
-                ))}
+                  );
+                })}
               </Column>
             </>
           )}
@@ -266,17 +288,30 @@ export default function About() {
               <Heading as="h2" id={about.studies.title} variant="display-strong-s" marginBottom="m">
                 {about.studies.title}
               </Heading>
-              <Column fillWidth gap="l" marginBottom="40">
-                {about.studies.institutions.map((institution, index) => (
-                  <Column key={`${institution.name}-${index}`} fillWidth gap="4">
-                    <Text id={institution.name} variant="heading-strong-l">
-                      {institution.name}
-                    </Text>
-                    <Text variant="heading-default-xs" onBackground="neutral-weak">
-                      {institution.description}
-                    </Text>
-                  </Column>
-                ))}
+              <Column fillWidth marginBottom="40">
+                {about.studies.institutions.map((institution, index) => {
+                  const isLast = index === about.studies.institutions.length - 1;
+                  return (
+                    <Column
+                      key={`${institution.name}-${index}`}
+                      id={institution.name}
+                      fillWidth
+                      paddingLeft="32"
+                      paddingBottom={isLast ? undefined : "l"}
+                      gap="4"
+                      style={{
+                        position: "relative",
+                        borderLeft: `2px solid ${isLast ? "transparent" : "var(--neutral-alpha-medium)"}`,
+                      }}
+                    >
+                      <Flex style={dotStyle} />
+                      <Text variant="heading-strong-l">{institution.name}</Text>
+                      <Text variant="heading-default-xs" onBackground="neutral-weak">
+                        {institution.description}
+                      </Text>
+                    </Column>
+                  );
+                })}
               </Column>
             </>
           )}
