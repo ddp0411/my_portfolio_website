@@ -23,7 +23,7 @@ const routes: RoutesConfig = {
   "/work": true,
   "/projects": true,
   "/publications": true,
-  "/blog": false, // off until there are posts to show
+  "/blog": true,
   "/gallery": false, // off — no photography
 };
 
