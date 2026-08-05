@@ -142,7 +142,8 @@ const effects: EffectsConfig = {
 };
 
 const mailchimp: MailchimpConfig = {
-  action: "https://url/subscribe/post?parameters",
+  // Newsletter now posts to /api/subscribe (MailerLite) — this field is unused, kept for the type.
+  action: "",
   effects: {
     mask: {
       cursor: true,
