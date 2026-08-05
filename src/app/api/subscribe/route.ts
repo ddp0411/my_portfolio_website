@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// Buttondown API. POST /v1/subscribers creates a subscriber (201).
-// A duplicate returns 400 with an "already subscribed" message.
-const BUTTONDOWN_ENDPOINT = "https://api.buttondown.email/v1/subscribers";
+// MailerLite API. POST /api/subscribers upserts a subscriber:
+// 201 when newly created, 200 when the email already exists — both are success.
+// 422 is returned for validation errors (e.g. malformed email).
+const MAILERLITE_ENDPOINT = "https://connect.mailerlite.com/api/subscribers";
 
 export async function POST(req: NextRequest) {
   let body: { email?: string; website?: string };
@@ -27,7 +28,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const apiKey = process.env.BUTTONDOWN_API_KEY;
+  const apiKey = process.env.MAILERLITE_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
       { ok: false, error: "Newsletter isn't configured yet." },
@@ -36,24 +37,19 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const res = await fetch(BUTTONDOWN_ENDPOINT, {
+    const res = await fetch(MAILERLITE_ENDPOINT, {
       method: "POST",
       headers: {
-        Authorization: `Token ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({ email_address: email }),
+      body: JSON.stringify({ email }),
     });
 
+    // 200 (already exists) and 201 (created) both mean the address is on the list.
     if (res.ok) {
       return NextResponse.json({ ok: true });
-    }
-
-    // Already subscribed → Buttondown returns 400; treat as a friendly success.
-    const text = await res.text().catch(() => "");
-    if (res.status === 400 && /already|subscribed|exists/i.test(text)) {
-      return NextResponse.json({ ok: true, already: true });
     }
 
     return NextResponse.json(

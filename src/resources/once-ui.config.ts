@@ -142,7 +142,7 @@ const effects: EffectsConfig = {
 };
 
 const mailchimp: MailchimpConfig = {
-  // Newsletter now posts to /api/subscribe (Buttondown) — this field is unused, kept for the type.
+  // Newsletter now posts to /api/subscribe (MailerLite) — this field is unused, kept for the type.
   action: "",
   effects: {
     mask: {
