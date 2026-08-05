@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// New MailerLite API (connect.mailerlite.com). POST /subscribers upserts:
-// 201 for a new subscriber, 200 if it already existed — both are success.
-const MAILERLITE_ENDPOINT = "https://connect.mailerlite.com/api/subscribers";
+// Buttondown API. POST /v1/subscribers creates a subscriber (201).
+// A duplicate returns 400 with an "already subscribed" message.
+const BUTTONDOWN_ENDPOINT = "https://api.buttondown.email/v1/subscribers";
 
 export async function POST(req: NextRequest) {
   let body: { email?: string; website?: string };
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const apiKey = process.env.MAILERLITE_API_KEY;
+  const apiKey = process.env.BUTTONDOWN_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
       { ok: false, error: "Newsletter isn't configured yet." },
@@ -35,29 +35,30 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const payload: Record<string, unknown> = { email };
-  const groupId = process.env.MAILERLITE_GROUP_ID;
-  if (groupId) payload.groups = [groupId];
-
   try {
-    const res = await fetch(MAILERLITE_ENDPOINT, {
+    const res = await fetch(BUTTONDOWN_ENDPOINT, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Token ${apiKey}`,
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ email_address: email }),
     });
 
     if (res.ok) {
       return NextResponse.json({ ok: true });
     }
 
-    // 422 = validation (e.g. a role/blocked address). Keep the message generic.
+    // Already subscribed → Buttondown returns 400; treat as a friendly success.
+    const text = await res.text().catch(() => "");
+    if (res.status === 400 && /already|subscribed|exists/i.test(text)) {
+      return NextResponse.json({ ok: true, already: true });
+    }
+
     return NextResponse.json(
       { ok: false, error: "Couldn't subscribe that address. Please try another." },
-      { status: res.status === 422 ? 422 : 502 },
+      { status: res.status >= 500 ? 502 : 400 },
     );
   } catch {
     return NextResponse.json(
