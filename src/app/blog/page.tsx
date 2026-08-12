@@ -36,7 +36,7 @@ export default function Blog() {
         </Text>
       </Column>
       <Column fillWidth flex={1} gap="40">
-        <Posts columns="2" thumbnail />
+        <Posts columns="2" thumbnail direction="column" />
         <Mailchimp marginBottom="l" />
       </Column>
     </Column>
