@@ -1,0 +1,138 @@
+---
+title: "Speed from video is a geometry problem, not a vision problem"
+publishedAt: "2026-02-18"
+summary: "YOLOv8 solved detection in an afternoon. Turning boxes into a trustworthy speed reading took months — and almost none of it was machine learning."
+image: "/images/blog/speed-geometry/cover.jpg"
+tag: "Computer Vision"
+---
+
+The [overspeed detection system](/projects/advanced-overspeed-detection-system)
+was my first real computer-vision project, and it broke an assumption I'd
+carried in from coursework: that the model is the hard part.
+
+Getting YOLOv8 to draw reliable boxes around vehicles in traffic footage took
+roughly an afternoon. Turning a sequence of those boxes into a number I'd be
+willing to put on an enforcement notice took months. That work was geometry,
+calibration, and tracking — barely any of it was machine learning.
+
+## Pixels aren't metres, and the exchange rate keeps changing
+
+Here's the problem in one sentence: a car moving at a constant speed covers
+wildly different numbers of pixels per frame depending on where it is in the
+image.
+
+A camera looking down a road sees vehicles that are large and fast-moving in
+pixel terms when near, small and slow-moving when far. Same physical speed,
+completely different pixel velocity. If you naively compute *pixels moved ÷
+time elapsed* and apply a single conversion factor, you get a system that
+systematically overestimates speed for near vehicles and underestimates it for
+distant ones.
+
+<Feedback
+  icon
+  variant="danger"
+  title="Why this is worse than it sounds"
+  description="The error isn't random noise you can average away. It's a smooth bias that varies with position, so it looks stable and believable in any given frame. A wrong answer that stays consistent is much harder to catch than one that jitters."
+  marginTop="16"
+  marginBottom="24"
+/>
+
+There are two honest ways out. You can calibrate — establish the homography
+between the image plane and the road plane, using known real-world distances
+(lane markings are conveniently standardised) to map pixel coordinates into
+ground coordinates. Or you can sidestep the mapping entirely.
+
+I ended up leaning on the second: **dual-camera analytics**. Put two cameras a
+known distance apart along the road, detect when a vehicle crosses each one, and
+compute speed from the time difference. You're no longer asking "how many metres
+is this pixel displacement," which is the question that requires calibration.
+You're asking "when did this vehicle cross line A and line B," and the distance
+between them is something you measured with a tape.
+
+The trade-off is that you've moved the hard problem rather than removed it. Now
+you need to know that the vehicle at camera B is the *same* vehicle that passed
+camera A.
+
+## Tracking is where the bodies are buried
+
+Detection gives you boxes per frame. Speed needs trajectories. The bridge is
+tracking, and tracking is where a demo that looks great on clean footage falls
+apart on real roads.
+
+The failure modes I kept hitting:
+
+<Table
+  data={{
+    headers: [
+      { content: "Failure", key: "failure" },
+      { content: "What you see", key: "symptom" },
+      { content: "Effect on speed", key: "effect" }
+    ],
+    rows: [
+      ["ID switch", "Two vehicles cross paths; their track IDs swap", "Two nonsense readings, often one absurdly high"],
+      ["Occlusion", "A truck hides a car for 15 frames", "Track dies and restarts as a new ID; no A→B match"],
+      ["Fragmentation", "One vehicle becomes three short tracks", "Every fragment too short to measure"],
+      ["Dropped detection", "Model misses the vehicle for a few frames", "Gap in trajectory, timing skewed"]
+    ]
+  }}
+/>
+
+Occlusion in dense traffic was the worst of these. Indian traffic is not a
+sparse motorway — vehicles are close, lane discipline is loose, two-wheelers weave
+between larger vehicles. A tracker tuned on highway footage degrades badly here.
+
+The practical fix was less about a cleverer tracker and more about **being
+willing to refuse to answer**. If a track was fragmented, or the confidence on
+the A→B match was weak, the system emitted no reading rather than a guess. For
+enforcement, a missed violation costs you very little. A fabricated one costs you
+the credibility of the entire system.
+
+## OCR was the most humbling part
+
+Reading number plates is the step that sounds trivially easy and is not.
+
+Off-the-shelf OCR is trained largely on documents: high contrast, flat, well-lit,
+consistent fonts. A number plate in traffic footage is none of those. It's
+angled, motion-blurred, sometimes dusty or partially obscured, lit by whatever
+the sun and headlights are doing. Indian plates add real font variation and a
+fair amount of non-standard formatting.
+
+What actually helped:
+
+- **Crop tight before you OCR.** Feed the plate region, not the vehicle box.
+  Every extra pixel of car body is noise.
+- **Choose your frame.** You get many frames of the same vehicle. Don't OCR the
+  first one — pick the sharpest, largest, most frontal crop from the track.
+- **Vote across frames.** Run OCR on several good crops and take the consensus
+  per character. A single read is a coin flip; five reads with agreement is
+  evidence.
+- **Validate against the format.** Indian plates follow a known pattern. A read
+  that violates it is wrong, and knowing that lets you reject or correct it.
+
+That last point generalises: **constrain your output space wherever the domain
+gives you a constraint for free.** It's the cheapest accuracy you will ever buy.
+
+## What I'd do differently
+
+If I restarted this today, I'd spend the first two weeks on calibration and
+tracking with a frozen, off-the-shelf detector — not touching the model at all.
+Every meaningful error in my final system traced back to geometry or identity,
+not to detection quality. I had the instinct to improve the part I knew how to
+improve, and it was the part that was already fine.
+
+I'd also build a small ground-truth set much earlier: footage where I actually
+knew the vehicle speeds. Without it, you're comparing your system's output to
+your own intuition about how fast a car looks, which is not a measurement.
+
+<Feedback
+  icon
+  variant="success"
+  title="The transferable lesson"
+  description="When a model outputs a physical quantity, the accuracy usually lives in the mapping from model output to physical units — not in the model. Audit that mapping first."
+  marginTop="16"
+  marginBottom="24"
+/>
+
+This work ended up backing two published papers — details on the
+[Publications](/publications) page — and the code is on
+[GitHub](https://github.com/ddp0411/overspeed_detection_project).

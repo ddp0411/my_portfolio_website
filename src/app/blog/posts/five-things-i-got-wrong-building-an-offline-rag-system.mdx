@@ -1,0 +1,157 @@
+---
+title: "Five things I got wrong building an offline RAG system"
+publishedAt: "2025-11-20"
+summary: "NeuroRAG runs entirely on a laptop — no cloud APIs, no telemetry. Getting there taught me that the model was never the hard part."
+image: "/images/blog/offline-rag/cover.jpg"
+tag: "Machine Learning"
+---
+
+When I started [NeuroRAG](/projects/neurorag), I thought the interesting problem was
+generation. Pick a good open model, feed it some context, done. The reality was
+that I spent maybe 15% of my time on the generator and the rest fighting things
+nobody puts in the architecture diagram.
+
+The constraint that shaped everything: it had to run **fully offline**. NeuroRAG
+answers questions about ICD-10 mental-health diagnoses, and the whole point is
+that a sensitive clinical query never leaves the machine. No OpenAI, no hosted
+vector DB, no "just call an API."
+
+Here's what I got wrong.
+
+<Feedback
+  icon
+  variant="info"
+  title="Stack, for context"
+  description="PyMuPDF for extraction, all-MiniLM-L6-v2 for embeddings, FAISS for the vector store, MMR for retrieval, Falcon-RW-1B for generation, Streamlit for the UI."
+  marginTop="16"
+  marginBottom="24"
+/>
+
+## 1. I treated PDF extraction as a solved step
+
+I budgeted an afternoon for "get text out of the PDF." It took days.
+
+The ICD-10 documentation is a dense clinical reference — multi-column layouts,
+tables of codes, footnotes, headers repeating on every page. A naive text dump
+gives you column A's first line, then column B's first line, interleaved into
+nonsense. Diagnostic criteria got shredded mid-sentence. Code tables lost their
+row structure entirely, which is catastrophic when the codes *are* the answer.
+
+PyMuPDF gives you positional data per text block, and the fix was to stop
+reading the PDF as a stream of characters and start reading it as a set of
+positioned blocks I could sort and group myself.
+
+**The lesson:** in a document-grounded system, extraction quality sets a ceiling
+on everything downstream. No retrieval strategy recovers information that got
+mangled on the way in. If I built this again I'd spend the first week purely on
+ingestion, with a visual diff of extracted vs. original.
+
+## 2. I picked a chunk size before I understood the document
+
+I went with ~500 tokens because that's the number everyone uses in tutorials. It
+was a guess dressed up as a decision.
+
+ICD-10 entries have a natural structure: a code, a name, inclusion criteria,
+exclusion criteria. A fixed-size window cuts straight across that. I ended up
+with chunks that contained a diagnosis name and half its criteria, and a
+separate chunk holding orphaned exclusions with no indication of what they
+belonged to. Retrieval would surface the second one and the model would answer
+confidently about the wrong condition.
+
+<Feedback
+  icon
+  variant="warning"
+  title="The failure mode to watch for"
+  description="A chunk that reads fluently on its own but has lost the entity it refers to. These are the hardest retrieval bugs to spot, because nothing looks broken until you check the answer against the source."
+  marginTop="16"
+  marginBottom="24"
+/>
+
+Fixed-size chunking is a reasonable default for prose. For structured reference
+documents it's actively harmful. Chunk on the document's own boundaries where
+you can find them.
+
+## 3. I assumed similarity search was enough
+
+Plain top-k cosine similarity has a specific pathology: ask about a diagnosis
+that appears in several near-identical passages and you get five chunks that all
+say roughly the same thing. You've spent your entire context budget on one
+restated fact and retrieved nothing that would let the model qualify or
+contextualise it.
+
+Switching retrieval to **Maximum Marginal Relevance** was the single biggest
+quality jump in the project. MMR scores candidates on relevance to the query
+*minus* similarity to what you've already selected, so the result set spreads out
+instead of clustering.
+
+```python
+# Conceptually, MMR selects iteratively:
+#   score = λ · sim(chunk, query) − (1 − λ) · max sim(chunk, already_selected)
+#
+# λ near 1.0 → pure relevance (the clustering behaviour you're trying to escape)
+# λ near 0.0 → pure diversity (relevance falls apart)
+# I landed around 0.5–0.7 after eyeballing results on a fixed question set.
+```
+
+I don't have a clean ablation number for this because I hadn't built an
+evaluation harness yet — which is its own mistake, and the next one.
+
+## 4. I evaluated by vibes for far too long
+
+For weeks my testing process was: type a question into Streamlit, read the
+answer, decide whether it felt right. This is a terrible way to build a
+retrieval system, for a reason that took me embarrassingly long to notice.
+
+A small model given *incomplete* context still writes fluent, confident,
+plausible prose. It sounds exactly like a model given *correct* context. Reading
+outputs tells you almost nothing about whether retrieval is working. I was
+tuning a pipeline through a channel that couldn't carry the signal I needed.
+
+What I should have done from day one — and what I'd insist on now — is score the
+retrieval stage independently of the generation stage. Even a hand-built set of
+30 questions with known-correct source passages, checked for "did the right
+chunk appear in the top k," would have caught problems weeks earlier.
+
+## 5. I underestimated how much a 1B model needs from me
+
+Falcon-RW-1B is small. That's the point — it runs on a laptop with no GPU
+budget. But small models are far less forgiving of a messy prompt than the hosted
+frontier models I'd been anchoring on.
+
+Concretely: a 7B+ model handed four chunks of context, one irrelevant, will
+usually ignore the irrelevant one. A 1B model may well latch onto it. It's more
+sensitive to instruction phrasing, more likely to drift into continuing the
+retrieved text rather than answering the question, and less able to say "the
+provided context doesn't cover this."
+
+Most of my prompt work went into making the task unmissable: explicit
+delimiters around retrieved context, an explicit instruction to answer only from
+it, and an explicit escape hatch for when the context is insufficient. Work you
+can skip with a bigger model, and can't skip here.
+
+## What I'd tell myself at the start
+
+<AccordionGroup
+  items={[
+    {
+      title: "Budget your time inversely to how interesting the step sounds",
+      content: <Text variant="body-default-s" onBackground="neutral-weak">Ingestion and chunking are boring and decide the outcome. Model selection is fun and mattered least.</Text>
+    },
+    {
+      title: "Build the evaluation harness before the third feature",
+      content: <Text variant="body-default-s" onBackground="neutral-weak">Not because it's rigorous practice, but because without it you literally cannot see retrieval failures. Fluent output masks them completely.</Text>
+    },
+    {
+      title: "Let the document dictate the chunking",
+      content: <Text variant="body-default-s" onBackground="neutral-weak">Structured reference material has boundaries already. Use them instead of imposing a token count.</Text>
+    },
+    {
+      title: "Offline is a real constraint, not a limitation to apologise for",
+      content: <Text variant="body-default-s" onBackground="neutral-weak">For clinical data, "this never leaves your machine" is a feature worth more than a few points of answer quality.</Text>
+    }
+  ]}
+/>
+
+The code is on [GitHub](https://github.com/ddp0411/NeuroRAG) if you want to pick
+through it. I'm still working on the evaluation side — that'll probably be its
+own post.

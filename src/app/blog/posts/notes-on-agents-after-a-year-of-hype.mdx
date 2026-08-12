@@ -1,0 +1,126 @@
+---
+title: "Notes on agents, after a year of hype"
+publishedAt: "2026-08-08"
+summary: "The interesting shift in 2026 isn't that agents got smarter. It's that the industry got specific about where they don't work."
+image: "/images/blog/agents-2026/cover.jpg"
+tag: "AI Engineering"
+---
+
+Somewhere in the last twelve months the conversation about AI agents changed
+tone. Less "agents will do everything," more "here is the narrow thing agents do
+reliably and here is the much larger thing they don't." That's a healthier place
+to be, and it's worth writing down what the shift actually consists of.
+
+I'm writing this as someone building small systems, not running an enterprise
+rollout. Take the numbers as industry context and the opinions as mine.
+
+## The 90/10 split
+
+The most useful heuristic I've picked up: roughly **90% workflows, 10% true
+agents** in anything running in production.
+
+A workflow is a pipeline you designed, where an LLM does specific bounded work at
+specific steps. You control the sequence. An agent decides its own sequence — it
+takes a goal, picks tools, and iterates until it thinks it's done.
+
+The second is more impressive and much harder to operate. It's non-deterministic
+in a way that makes debugging genuinely difficult: the same input can take a
+different path today than yesterday, so "reproduce the bug" stops being a simple
+instruction.
+
+<Feedback
+  icon
+  variant="info"
+  title="A test that keeps me honest"
+  description="If I can draw the sequence of steps on paper before running it, I should build a workflow, not an agent. Reaching for agency when the path is already known adds variance and buys nothing."
+  marginTop="16"
+  marginBottom="24"
+/>
+
+Industry data lines up with this. Gartner expects around 40% of enterprise apps
+to embed task-specific agents by the end of this year, up from under 5% in
+2025 — but also expects a substantial share of agentic projects to be cancelled
+by 2027. Both things are true. Adoption is real; so is the pilot graveyard.
+
+## Protocols are the genuinely new thing
+
+If I had to name one development that changed how systems get built rather than
+how they get marketed, it's the protocol layer.
+
+**MCP** (Model Context Protocol) standardises how a model connects to data and
+tools. **A2A** standardises how agents talk to each other. Before these, every
+integration was bespoke plumbing — a custom adapter per tool, per project,
+thrown away at the end.
+
+The practical effect is compositional. You write an MCP server for a data source
+once, and anything speaking MCP can use it. That's an unglamorous
+infrastructure win, and it's the kind that tends to matter more over time than
+whatever the current best model is.
+
+The friction that's emerged: once an organisation has a dozen MCP servers,
+managing them becomes its own problem. Who owns them, what they're permitted to
+touch, how you audit what an agent did through them. That's governance work, and
+it's arriving faster than most teams planned for.
+
+## Multi-agent is oversold, but not by as much as I expected
+
+The "orchestra of specialised agents" framing gets deployed a lot. The reported
+reality is more mixed — surveys this year put the average enterprise at around a
+dozen agents, with roughly half operating in isolation rather than coordinating
+with anything.
+
+So the architecture diagrams are ahead of the deployments. Fine — that's normal.
+But I've come around on the underlying idea, for a reason that's less about
+capability and more about debuggability: **a specialised agent with three tools
+and a narrow brief is something you can reason about.** A generalist agent with
+thirty tools is not. Decomposition helps you, the operator, more than it helps
+the model.
+
+The cost is coordination overhead, which is real and often underestimated. Every
+sub-agent needs its own reliable data access, and every handoff is a place where
+context gets lost.
+
+## The part that hasn't changed
+
+Human judgment is still load-bearing, and the data says so fairly bluntly.
+Developers reportedly use AI for something like 60% of their work while being
+able to fully hand off only a small fraction of tasks. The gap between "AI
+touched this" and "AI owned this end to end" remains wide.
+
+That matches my experience. The tools are excellent at the middle of a task —
+generating the obvious implementation, refactoring across files, explaining an
+unfamiliar codebase. They're weakest exactly where the work is hardest: deciding
+what to build, noticing that the requirement is wrong, knowing which failure is
+worth chasing.
+
+<AccordionGroup
+  items={[
+    {
+      title: "What I'd actually build with agents today",
+      content: <Text variant="body-default-s" onBackground="neutral-weak">Bounded, reversible, verifiable tasks. Research and summarisation across sources. Triage and routing. Code changes that a test suite can validate. Anything where a wrong answer is cheap to detect and cheap to undo.</Text>
+    },
+    {
+      title: "What I'd keep as a deterministic workflow",
+      content: <Text variant="body-default-s" onBackground="neutral-weak">Anything with a known sequence, anything touching production data destructively, anything where the cost of a plausible-but-wrong result is high. Non-determinism is a feature only when you need it.</Text>
+    },
+    {
+      title: "What I'd instrument before shipping anything",
+      content: <Text variant="body-default-s" onBackground="neutral-weak">Full traces of every tool call and decision point, plus per-run cost. Agent economics degrade quietly — a retry loop that doubles token spend looks identical from the outside to one that doesn't.</Text>
+    }
+  ]}
+/>
+
+## Where I've landed
+
+The honest summary is that agents are a real capability with a narrower
+applicable range than the discourse suggests, and the useful skill isn't prompting
+them — it's **knowing when not to reach for one.**
+
+That's less exciting than the 2025 version of this conversation. It's also the
+first time the advice has felt actionable. I'd rather build the boring 90% well
+and use genuine agency where it earns its variance.
+
+Currently working through what this means for my own projects — particularly
+whether a retrieval pipeline benefits from an agentic query-rewriting step or
+just gets less predictable. I suspect the answer is "measure it," which is
+usually the answer.

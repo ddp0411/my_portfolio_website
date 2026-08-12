@@ -1,0 +1,141 @@
+---
+title: "Your RAG system is probably failing at retrieval, not generation"
+publishedAt: "2026-06-22"
+summary: "Most RAG evaluation only scores the answer. That's how a pipeline loses a third of its retrieval quality while the dashboard stays green."
+image: "/images/blog/rag-eval/cover.jpg"
+tag: "AI Engineering"
+---
+
+There's a specific way RAG systems fail that I keep running into, in my own work
+and in other people's: **retrieval quality degrades, and nothing on the dashboard
+moves.**
+
+The mechanism is simple once you see it. A language model handed incomplete
+context still writes a fluent, well-structured, confident answer. It reads as
+grounded. If your evaluation only scores the final answer, that answer looks
+fine — so a retriever that has quietly stopped surfacing the right passages
+generates no alarm at all.
+
+I learned this the hard way on [NeuroRAG](/projects/neurorag), where for weeks my
+entire evaluation process was reading outputs and deciding whether they felt
+correct.
+
+## RAG has two stages and they fail independently
+
+<Table
+  data={{
+    headers: [
+      { content: "Stage", key: "stage" },
+      { content: "Question it answers", key: "question" },
+      { content: "How it fails", key: "fails" }
+    ],
+    rows: [
+      ["Retrieve", "Did the right chunks come back for this query?", "Missed relevant chunks (low recall); surfaced irrelevant ones (low precision)"],
+      ["Generate", "Did the model use those chunks to answer correctly?", "Fabricated claims; ignored context; answered a different question"]
+    ]
+  }}
+/>
+
+Because they fail independently, **you need at least one metric per stage.**
+Track only generation and retrieval regressions hide behind fluent prose. Track
+only retrieval and you miss the model fabricating on top of perfectly good
+context.
+
+That's the whole argument, and it's the thing I'd want someone to take away even
+if they read nothing else here.
+
+## The metrics worth having
+
+Scored on the retrieval span, independent of what the generator does with the
+results:
+
+- **Context precision** — of the chunks retrieved, how many were actually
+  relevant? Low precision means you're burning context budget on noise.
+- **Context recall** — of the chunks that *should* have been retrieved, how many
+  were? This is the one that silently drifts.
+- **Precision@k / Recall@k, MRR, NDCG** — the classic IR metrics. MRR is
+  particularly useful when you care whether the single best passage came back
+  near the top.
+
+Scored on the generation span:
+
+- **Faithfulness / groundedness** — is every claim in the answer supported by the
+  retrieved context? This catches fabrication specifically.
+- **Answer relevance** — did it answer the question that was asked, rather than a
+  neighbouring one?
+
+<Feedback
+  icon
+  variant="warning"
+  title="The trap"
+  description="Faithfulness and answer relevance can both look healthy while context recall falls off a cliff. The model is grounding faithfully in the incomplete context it received — it's being honest about the wrong material."
+  marginTop="16"
+  marginBottom="24"
+/>
+
+## Score them on the same trace
+
+The detail that makes this practical: instrument retrieval and generation as
+spans on a **single trace per query**, and attach metrics to their respective
+spans. When a score drops you want to open one trace and see the query, the
+retrieved chunks, the assembled prompt, and the output — in order.
+
+Without that, "faithfulness dropped 8% this week" is a fact you can't act on. You
+can't tell whether the retriever changed, the corpus changed, the chunking
+changed, or the prompt changed. With per-span traces, you look at ten failing
+examples and usually know within minutes.
+
+## Build the smallest harness that works
+
+The version of this advice that gets ignored is the one that starts with "adopt
+an evaluation platform." You don't need one to begin. You need:
+
+1. **A fixed question set.** Thirty to fifty questions covering the range of what
+   users actually ask, including questions your corpus *can't* answer.
+2. **Known-good source passages** for each. This is the tedious part and there's
+   no shortcut — you read the corpus and mark the right answers.
+3. **A script** that runs the pipeline and reports retrieval hit rate at k, plus
+   whatever generation check you can afford.
+4. **A rule that you run it before every change you'd describe as an
+   improvement.**
+
+That's an afternoon of work and it converts "I think this helped" into "this
+moved recall@5 from 0.62 to 0.71." Everything more sophisticated is an upgrade
+from there, not a prerequisite.
+
+<Feedback
+  icon
+  variant="info"
+  title="On LLM-as-judge"
+  description="Using a model to score faithfulness and relevance scales well and is now standard practice. It also inherits the judge model's blind spots. Spot-check the judge against human labels on a sample before you trust its trend line — an unaudited judge is a metric with unknown bias."
+  marginTop="16"
+  marginBottom="24"
+/>
+
+## Those unanswerable questions matter more than you'd think
+
+Point 1 above deserves emphasis. Include questions your corpus genuinely cannot
+answer, and check that the system declines rather than improvising.
+
+This is the single most useful test I run. A pipeline that answers everything is
+not a pipeline with great recall — it's a pipeline that has never learned to say
+no. For anything in a clinical, legal, or financial setting, a confident wrong
+answer is meaningfully worse than a refusal, and you only find out whether you
+have that property by explicitly testing for it.
+
+## Where this is heading
+
+The framing that's taken hold over the past year — and I think it's the right one
+— is that retrieval is one part of a broader **context engineering** problem:
+what goes into the model's window, in what order, compressed how, carried across
+how many turns. Prompt phrasing matters much less than which three chunks the
+retriever surfaced.
+
+Graph-augmented retrieval is the interesting frontier here. Instead of returning
+isolated chunks, you return connected subgraphs — entities plus their
+relationships — which addresses the exact problem I hit with ICD-10, where a
+diagnosis and its exclusion criteria are related but not adjacent.
+
+I haven't rebuilt NeuroRAG on that model yet. When I do, I'll have a harness to
+tell me whether it actually helped — which is more than I could say the first
+time around.
