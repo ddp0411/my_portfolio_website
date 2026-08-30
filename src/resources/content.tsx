@@ -64,7 +64,7 @@ const home: Home = {
     <>
       Transforming data
       <br />
-      <em>into decisions</em>
+      into decisions
     </>
   ),
   featured: {

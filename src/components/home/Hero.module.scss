@@ -1,0 +1,239 @@
+/* Distance from the top of the page to where page content normally starts:
+   the layout's top spacer + the sticky header + the content wrapper padding +
+   the page column's own padding. The hero cancels it so the band reaches the
+   very top edge and the header floats over it. */
+.hero {
+  --hero-pull: 7.875rem;
+  --figure-width: 38%;
+
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  min-height: 42rem;
+
+  /* Break out of the centred, padded content column to full viewport width. */
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  margin-top: calc(-1 * var(--hero-pull));
+  padding-top: var(--hero-pull);
+  padding-bottom: 3rem;
+  overflow: hidden;
+}
+
+/* The blend is two masks, one per element, rather than two layers on one
+   element: nested masks multiply, so this needs no `mask-composite` (whose
+   prefixed and unprefixed forms disagree across engines).
+   Outer element fades the side facing the copy... */
+.figure {
+  position: absolute;
+  inset: 0 0 0 auto;
+  display: flex;
+  align-items: flex-end;
+  width: var(--figure-width);
+  pointer-events: none;
+  user-select: none;
+
+  --fade-x: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.12) 24%,
+    rgba(0, 0, 0, 0.62) 48%,
+    #000 72%
+  );
+  -webkit-mask-image: var(--fade-x);
+  mask-image: var(--fade-x);
+}
+
+/* ...and the photo itself fades in from the top edge and out along the
+   bottom, so it dissolves into the page instead of ending on a cut. The image
+   stops short of the full height so the subject sits lower in the band. */
+.figure img {
+  width: 100%;
+  height: 88%;
+  object-fit: cover;
+  object-position: 50% 0;
+
+  --fade-y: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 11%,
+    #000 60%,
+    rgba(0, 0, 0, 0.45) 87%,
+    transparent 100%
+  );
+  -webkit-mask-image: var(--fade-y);
+  mask-image: var(--fade-y);
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  /* Widened by the padding so the copy's text edge lines up with the page
+     content column below, which is `maxWidth="m"` inside `padding="l"`. */
+  max-width: calc(var(--responsive-width-m) + 2 * var(--static-space-24));
+  margin-inline: auto;
+  padding-inline: var(--static-space-24);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.4rem;
+}
+
+/* Pill above the headline. Fixed to neutral tokens rather than the brand tint
+   so it stays legible where the portrait's warm backdrop bleeds behind it. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--neutral-alpha-medium);
+  border-radius: 999px;
+  background: var(--neutral-alpha-weak);
+  color: var(--neutral-on-background-strong);
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+.badge:hover {
+  border-color: var(--neutral-alpha-strong);
+  background: var(--neutral-alpha-medium);
+}
+.badge:focus-visible {
+  outline: 2px solid var(--brand-solid-strong);
+  outline-offset: 3px;
+}
+
+.title {
+  margin: 0;
+  max-width: 20ch;
+  color: var(--neutral-on-background-strong);
+  font-family: var(--font-heading), sans-serif;
+  font-size: clamp(2.6rem, 5vw, 3.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+}
+
+.sub {
+  margin: 0;
+  max-width: 36rem;
+  color: var(--neutral-on-background-weak);
+  font-size: 1.16rem;
+  line-height: 1.6;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 6rem;
+  padding: 0.85rem 1.15rem 0.95rem;
+  border: 1px solid var(--neutral-alpha-weak);
+  border-radius: var(--radius-m);
+  background: var(--neutral-alpha-weak);
+}
+
+.statValue {
+  color: var(--brand-on-background-medium);
+  font-family: var(--font-heading), sans-serif;
+  font-size: 1.85rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+
+.statLabel {
+  color: var(--neutral-on-background-weak);
+  font-size: 0.95rem;
+}
+
+/* Mid widths keep the side-by-side layout — stacking a portrait-orientation
+   photo into a full-width band this early crops it down to a floating head —
+   but the copy has to give the figure room. */
+@media (max-width: 1100px) {
+  .hero {
+    --figure-width: 44%;
+    min-height: 38rem;
+  }
+
+  .title {
+    font-size: clamp(2.3rem, 4.6vw, 3.2rem);
+  }
+
+  .sub {
+    max-width: 26rem;
+    font-size: 1.08rem;
+  }
+}
+
+/* Narrow screens: the portrait moves above the copy as a wide band that fades
+   into the page top and bottom, so the face is never behind the text. */
+@media (max-width: 700px) {
+  .hero {
+    display: block;
+    min-height: 0;
+    padding-bottom: 2rem;
+  }
+
+  /* Tall enough that a full-width band still crops to roughly half-body. */
+  .figure {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: 28rem;
+    margin-bottom: 1.5rem;
+
+    --fade-x: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  /* Feathered at both ends: how far the band sits below the header varies with
+     the breakpoint, so the top edge has to read as a blend wherever it lands
+     rather than relying on it lining up with the top of the page. */
+  .figure img {
+    height: 100%;
+    object-position: 50% 6%;
+    --fade-y: linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 12%,
+      #000 46%,
+      rgba(0, 0, 0, 0.5) 78%,
+      transparent 100%
+    );
+  }
+
+  .title {
+    font-size: clamp(2.2rem, 8vw, 3rem);
+  }
+
+  .sub {
+    max-width: none;
+    font-size: 1.05rem;
+  }
+}
+
+/* Four stat cards stop fitting on one line well before the copy does. */
+@media (max-width: 560px) {
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badge {
+    transition: none;
+  }
+}

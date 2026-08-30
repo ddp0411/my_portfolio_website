@@ -67,3 +67,11 @@
   --scheme-neutral-600-50: rgba(137,152,159,0.5);
   /*
 }*/
+/* The home hero breaks out of the padded content column to full viewport
+   width with `width: 100vw`. Where the scrollbar takes layout space, 100vw is
+   wider than the content box, so clip the overflow it would otherwise cause.
+   `clip` rather than `hidden` because `hidden` would turn the body into a
+   scroll container and break the sticky header. */
+body {
+  overflow-x: clip;
+}

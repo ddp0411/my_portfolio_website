@@ -5,23 +5,15 @@ import {
   RevealFx,
   Column,
   Row,
-  Grid,
   IconButton,
   SmartLink,
   Schema,
   Meta,
 } from "@once-ui-system/core";
 import { home, about, person, baseURL, social } from "@/resources";
-import { Mailchimp, HeroBand } from "@/components";
+import { Mailchimp, Hero } from "@/components";
 import { Projects } from "@/components/work/Projects";
 import React from "react";
-
-const highlights = [
-  { value: "2", label: "Published papers" },
-  { value: "5", label: "Internships & roles" },
-  { value: "5+", label: "ML & AI projects" },
-  { value: "92%", label: "Best model accuracy" },
-];
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -50,43 +42,15 @@ export default function Home() {
         }}
       />
 
-      {/* Hero */}
-      <RevealFx translateY="8" fillWidth>
-        <HeroBand />
-      </RevealFx>
+      {/* Hero — full-bleed, breaks out of this column's width */}
+      <Hero />
 
-      {/* Highlights strip */}
-      <RevealFx translateY="8" delay={0.5} fillWidth>
-        <Grid columns="4" s={{ columns: 2 }} fillWidth gap="12">
-          {highlights.map((item) => (
-            <Column
-              key={item.label}
-              fillWidth
-              horizontal="center"
-              align="center"
-              gap="4"
-              padding="l"
-              radius="l"
-              background="surface"
-              border="neutral-alpha-weak"
-            >
-              <Heading variant="display-strong-s" onBackground="brand-medium">
-                {item.value}
-              </Heading>
-              <Text variant="body-default-s" onBackground="neutral-weak" align="center">
-                {item.label}
-              </Text>
-            </Column>
-          ))}
-        </Grid>
-      </RevealFx>
-
-      {/* Selected work — top 2 projects */}
+      {/* Featured work — top 2 projects */}
       <RevealFx translateY="16" delay={0.6} fillWidth>
         <Column fillWidth gap="l">
           <Row fillWidth horizontal="between" vertical="end">
             <Heading as="h2" variant="display-strong-xs">
-              Selected work
+              Featured work
             </Heading>
             <SmartLink href="/projects" suffixIcon="arrowRight">
               <Text variant="body-default-s">All projects</Text>
