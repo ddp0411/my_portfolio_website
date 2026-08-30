@@ -5,7 +5,7 @@ const person: Person = {
   firstName: "Devanshu",
   lastName: "Patil",
   name: `Devanshu Vijay Patil`,
-  role: "Data Scientist",
+  role: "Data Engineer",
   avatar: "/images/avatar.jpg",
   email: "devanshupatil1712@gmail.com",
   location: "Asia/Kolkata", // Pune, India — IANA zone powers the header clock
@@ -65,14 +65,14 @@ const home: Home = {
     display: true,
     title: (
       <Row gap="12" vertical="center">
-        <strong className="ml-4">Featured</strong>{" "}
+        <strong className="ml-4">New role</strong>{" "}
         <Line background="brand-alpha-strong" vert height="20" />
         <Text marginRight="4" onBackground="brand-medium">
-          Overspeed Detection System
+          Data Engineer @ Synthesys
         </Text>
       </Row>
     ),
-    href: "/projects/advanced-overspeed-detection-system",
+    href: "/work",
   },
   subline: (
     <>
@@ -126,6 +126,26 @@ const about: About = {
     title: "Work Experience",
     experiences: [
       {
+        company: "Synthesys Solutions Pvt. Ltd.",
+        timeframe: "Aug 2026 – Present",
+        role: "Data Engineer",
+        achievements: [
+          <>
+            Building and maintaining the data infrastructure that powers analytics and reporting, in
+            collaboration with a team of engineers.
+          </>,
+          <>
+            Working with Python, SQL, AWS, and Snowflake to design and run data pipelines end to end.
+          </>,
+          <>
+            Generating insights from the processed data to support decision-making across the
+            business.
+          </>,
+        ],
+        tech: ["Python", "SQL", "AWS", "Snowflake"],
+        images: [],
+      },
+      {
         company: "Freelance",
         timeframe: "Apr 2026 – Jul 2026",
         role: "AI Software Developer",
@@ -154,9 +174,9 @@ const about: About = {
         images: [],
       },
       {
-        company: "QnQ Solutions",
+        company: "QnQ Solutions | Freelance",
         timeframe: "Jun 2025 – Nov 2025",
-        role: "Freelance Data Analyst",
+        role: "Business Analyst",
         achievements: [
           <>
             Built an end-to-end manufacturing analytics solution in Power BI to evaluate

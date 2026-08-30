@@ -43,7 +43,7 @@ export default function Work() {
       <Column maxWidth="s" horizontal="center" align="center" gap="12" marginBottom="xl">
         <Heading variant="heading-strong-xl">Work Experience</Heading>
         <Text onBackground="neutral-weak" variant="body-default-l">
-          A timeline of the roles I've held across data science, analytics, and AI.
+          A timeline of the roles I've held across data science, analytics, AI, and academics.
         </Text>
       </Column>
 

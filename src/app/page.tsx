@@ -20,7 +20,7 @@ import React from "react";
 
 const highlights = [
   { value: "2", label: "Published papers" },
-  { value: "4", label: "Internships & roles" },
+  { value: "5", label: "Internships & roles" },
   { value: "5+", label: "ML & AI projects" },
   { value: "92%", label: "Best model accuracy" },
 ];
