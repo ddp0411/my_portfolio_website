@@ -25,11 +25,6 @@ const routes: RoutesConfig = {
   "/publications": true,
   "/blog": true,
   "/gallery": false, // off — no photography
-  // TEMPORARY: homepage hero directions, remove before merge
-  "/preview": true,
-  "/preview/hero-a": true,
-  "/preview/hero-b": true,
-  "/preview/hero-c": true,
 };
 
 const display: DisplayConfig = {

@@ -60,7 +60,13 @@ const home: Home = {
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Transforming data into decisions</>,
+  headline: (
+    <>
+      Transforming data
+      <br />
+      <em>into decisions</em>
+    </>
+  ),
   featured: {
     display: true,
     title: (
