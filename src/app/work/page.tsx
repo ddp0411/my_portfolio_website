@@ -26,7 +26,7 @@ export default function Work() {
   const experiences = about.work.experiences;
 
   return (
-    <Column maxWidth="m" paddingTop="24">
+    <Column maxWidth="m" paddingTop="24" horizontal="center">
       <Schema
         as="webPage"
         baseURL={baseURL}
