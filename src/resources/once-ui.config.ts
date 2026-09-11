@@ -14,8 +14,8 @@ import {
 import { home, person, social } from "./content";
 
 // IMPORTANT: used for SEO in meta tags and schema.
-// TODO: update to the real Vercel URL after the first deploy (or a custom domain).
-const baseURL: string = "https://devanshupatil-theta.vercel.app";
+// Custom domain — must match the canonical host exactly (www, https, no trailing slash).
+const baseURL: string = "https://www.devanshupatil.blog";
 
 const routes: RoutesConfig = {
   "/": true,
