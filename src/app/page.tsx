@@ -3,6 +3,7 @@ import { Schema, Meta } from "@/components/seo";
 import { home, about, person, baseURL, social } from "@/resources";
 import { Mailchimp, Hero } from "@/components";
 import { Projects } from "@/components/work/Projects";
+import { Posts } from "@/components/blog/Posts";
 import React from "react";
 
 export async function generateMetadata() {
@@ -47,6 +48,21 @@ export default function Home() {
             </SmartLink>
           </Row>
           <Projects include={["neurorag", "advanced-overspeed-detection-system"]} columns="2" />
+        </Column>
+      </RevealFx>
+
+      {/* Latest writing — two newest posts */}
+      <RevealFx translateY="16" delay={0.65} fillWidth>
+        <Column fillWidth gap="l">
+          <Row fillWidth horizontal="between" vertical="end">
+            <Heading as="h2" variant="display-strong-xs">
+              Latest writing
+            </Heading>
+            <SmartLink href="/blog" suffixIcon="arrowRight">
+              <Text variant="body-default-s">All posts</Text>
+            </SmartLink>
+          </Row>
+          <Posts range={[1, 2]} columns="2" thumbnail direction="column" />
         </Column>
       </RevealFx>
 

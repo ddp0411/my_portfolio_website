@@ -7,6 +7,7 @@ import { formatDate } from "@/utils/formatDate";
 import { ScrollToHash, CustomMDX } from "@/components";
 import { Metadata } from "next";
 import { Projects } from "@/components/work/Projects";
+import { Posts } from "@/components/blog/Posts";
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const posts = getPosts(["src", "app", "projects", "projects"]);
@@ -60,6 +61,13 @@ export default async function Project({
       src: person.avatar,
     })) || [];
 
+  // Blog posts that link to this project get linked back from it, so readers and
+  // crawlers can move from a project to the write-ups about it.
+  const projectLink = new RegExp(`\\]\\(/projects/${post.slug}(#[^)]*)?\\)`);
+  const relatedWriting = getPosts(["src", "app", "blog", "posts"])
+    .filter((blogPost) => projectLink.test(blogPost.content))
+    .map((blogPost) => blogPost.slug);
+
   return (
     <Column as="section" maxWidth="m" horizontal="center" gap="l">
       <Schema
@@ -111,6 +119,20 @@ export default async function Project({
       <Column style={{ margin: "auto" }} as="article" maxWidth="xs">
         <CustomMDX source={post.content} />
       </Column>
+      {relatedWriting.length > 0 && (
+        <Column fillWidth gap="40" horizontal="center" marginTop="40">
+          <Line maxWidth="40" />
+          <Heading as="h2" variant="heading-strong-xl" marginBottom="24">
+            Related writing
+          </Heading>
+          <Posts
+            include={relatedWriting}
+            columns={relatedWriting.length > 1 ? "2" : "1"}
+            thumbnail
+            direction="column"
+          />
+        </Column>
+      )}
       <Column fillWidth gap="40" horizontal="center" marginTop="40">
         <Line maxWidth="40" />
         <Heading as="h2" variant="heading-strong-xl" marginBottom="24">
