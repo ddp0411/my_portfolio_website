@@ -1,6 +1,7 @@
-import { Flex, Meta, Schema } from "@once-ui-system/core";
+import { Flex } from "@once-ui-system/core";
+import { Meta, Schema } from "@/components/seo";
 import GalleryView from "@/components/gallery/GalleryView";
-import { baseURL, gallery, person } from "@/resources";
+import { baseURL, gallery, person, routes } from "@/resources";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -9,6 +10,8 @@ export async function generateMetadata() {
     baseURL: baseURL,
     image: `/api/og/generate?title=${encodeURIComponent(gallery.title)}`,
     path: gallery.path,
+    // Keep the page out of search results while the route is switched off.
+    noindex: !routes["/gallery"],
   });
 }
 

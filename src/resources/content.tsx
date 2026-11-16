@@ -58,8 +58,9 @@ const home: Home = {
   path: "/",
   image: "/images/og/home.jpg",
   label: "Home",
-  title: `${person.name}'s Portfolio`,
-  description: `Portfolio website showcasing my work as a ${person.role}`,
+  // Search result title (~60 chars) and snippet (~155 chars).
+  title: `${person.name} – ${person.role} & AI Developer, Pune`,
+  description: `${person.name} is a ${person.role} in Pune, India, building data pipelines, RAG systems and computer-vision projects with Python, SQL, AWS and Snowflake.`,
   headline: (
     <>
       Transforming data
@@ -93,7 +94,7 @@ const about: About = {
   path: "/about",
   label: "About",
   title: `About – ${person.name}`,
-  description: `Meet ${person.name}, ${person.role} from ${person.location}`,
+  description: `About ${person.name}, a ${person.role} in Pune, India: work experience, studies at IIT Madras and SPPU, and skills in ML, generative AI and data engineering.`,
   tableOfContent: {
     display: true,
     subItems: false,
@@ -346,7 +347,7 @@ const work: Work = {
   path: "/work",
   label: "Work-Ex",
   title: `Work Experience – ${person.name}`,
-  description: `Professional and academic experience of ${person.name}`,
+  description: `Work experience of ${person.name}: Data Engineer at Synthesys, plus AI development, data analytics, business analysis and data science roles.`,
 };
 
 // "Projects" tab = project case studies (.mdx files in app/projects/projects)
@@ -354,7 +355,7 @@ const projects: Work = {
   path: "/projects",
   label: "Projects",
   title: `Projects – ${person.name}`,
-  description: `Data science and engineering projects by ${person.name}`,
+  description: `Data science and AI projects by ${person.name}: an offline RAG assistant, YOLOv8 overspeed detection, LSTM stock forecasting and more.`,
 };
 
 // "Publications" tab = peer-reviewed papers
@@ -362,7 +363,7 @@ const publications: Work = {
   path: "/publications",
   label: "Publications",
   title: `Publications – ${person.name}`,
-  description: `Peer-reviewed research published by ${person.name}`,
+  description: `Peer-reviewed research by ${person.name} on real-time vehicle overspeed detection using YOLOv8, OCR and dual-camera analytics.`,
 };
 
 const gallery: Gallery = {

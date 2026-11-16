@@ -1,4 +1,5 @@
-import { Column, Heading, Meta, Schema, Text } from "@once-ui-system/core";
+import { Column, Heading, Text } from "@once-ui-system/core";
+import { Meta, Schema } from "@/components/seo";
 import { baseURL, about, person, projects } from "@/resources";
 import { Projects } from "@/components/work/Projects";
 
@@ -16,7 +17,7 @@ export default function ProjectsPage() {
   return (
     <Column maxWidth="m" paddingTop="24" horizontal="center">
       <Schema
-        as="webPage"
+        as="collectionPage"
         baseURL={baseURL}
         path={projects.path}
         title={projects.title}

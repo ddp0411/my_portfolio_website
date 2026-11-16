@@ -1,18 +1,5 @@
-import {
-  Avatar,
-  Button,
-  Column,
-  Flex,
-  Heading,
-  Icon,
-  IconButton,
-  Media,
-  Tag,
-  Text,
-  Meta,
-  Schema,
-  Row,
-} from "@once-ui-system/core";
+import { Avatar, Button, Column, Flex, Heading, Icon, IconButton, Media, Tag, Text, Row } from "@once-ui-system/core";
+import { Meta, Schema } from "@/components/seo";
 import { baseURL, about, person, social } from "@/resources";
 import TableOfContents from "@/components/about/TableOfContents";
 import styles from "@/components/about/about.module.scss";
@@ -64,7 +51,7 @@ export default function About() {
   return (
     <Column maxWidth="m">
       <Schema
-        as="webPage"
+        as="profilePage"
         baseURL={baseURL}
         title={about.title}
         description={about.description}

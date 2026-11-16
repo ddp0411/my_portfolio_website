@@ -1,19 +1,7 @@
 import { notFound } from "next/navigation";
 import { CustomMDX, ScrollToHash } from "@/components";
-import {
-  Meta,
-  Schema,
-  Column,
-  Heading,
-  HeadingNav,
-  Icon,
-  Row,
-  Text,
-  SmartLink,
-  Avatar,
-  Media,
-  Line,
-} from "@once-ui-system/core";
+import { Column, Heading, HeadingNav, Icon, Row, Text, SmartLink, Avatar, Media, Line } from "@once-ui-system/core";
+import { Meta, Schema } from "@/components/seo";
 import { baseURL, about, blog, person } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
 import { getPosts } from "@/utils/utils";
@@ -50,6 +38,8 @@ export async function generateMetadata({
     baseURL: baseURL,
     image: post.metadata.image || `/api/og/generate?title=${post.metadata.title}`,
     path: `${blog.path}/${post.slug}`,
+    type: "article",
+    publishedTime: post.metadata.publishedAt,
   });
 }
 

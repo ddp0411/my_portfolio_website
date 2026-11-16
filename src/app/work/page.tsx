@@ -1,4 +1,5 @@
-import { Column, Flex, Heading, Meta, Schema, Tag, Text, Row } from "@once-ui-system/core";
+import { Column, Flex, Heading, Tag, Text, Row } from "@once-ui-system/core";
+import { Meta, Schema } from "@/components/seo";
 import { baseURL, about, person, work } from "@/resources";
 import React from "react";
 

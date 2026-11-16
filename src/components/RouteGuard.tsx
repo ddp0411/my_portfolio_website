@@ -1,51 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { routes } from "@/resources";
-import { Flex, Spinner } from "@once-ui-system/core";
 import NotFound from "@/app/not-found";
 
 interface RouteGuardProps {
   children: React.ReactNode;
 }
 
-const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
-  const pathname = usePathname();
-  const [isRouteEnabled, setIsRouteEnabled] = useState(false);
-  const [loading, setLoading] = useState(true);
+const dynamicRoutes = ["/blog", "/work", "/projects"] as const;
 
-  useEffect(() => {
-    const checkRouteEnabled = () => {
-      if (!pathname) return false;
+function isRouteEnabled(pathname: string | null) {
+  if (!pathname) return false;
 
-      if (pathname in routes) {
-        return routes[pathname as keyof typeof routes];
-      }
-
-      const dynamicRoutes = ["/blog", "/work", "/projects"] as const;
-      for (const route of dynamicRoutes) {
-        if (pathname?.startsWith(route) && routes[route]) {
-          return true;
-        }
-      }
-
-      return false;
-    };
-
-    setIsRouteEnabled(checkRouteEnabled());
-    setLoading(false);
-  }, [pathname]);
-
-  if (loading) {
-    return (
-      <Flex fillWidth paddingY="128" horizontal="center">
-        <Spinner />
-      </Flex>
-    );
+  if (pathname in routes) {
+    return routes[pathname as keyof typeof routes];
   }
 
-  if (!isRouteEnabled) {
+  return dynamicRoutes.some((route) => pathname.startsWith(route) && routes[route]);
+}
+
+// The check runs during render, not in an effect, so the page's real content is in
+// the server HTML. (Previously the server sent only a spinner, and crawlers that
+// don't run JavaScript, including most AI crawlers, saw an empty page.)
+const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
+  const pathname = usePathname();
+
+  if (!isRouteEnabled(pathname)) {
     return <NotFound />;
   }
 

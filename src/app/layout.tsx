@@ -4,15 +4,8 @@ import "@/resources/custom.css";
 
 import classNames from "classnames";
 
-import {
-  Background,
-  Column,
-  Flex,
-  Meta,
-  opacity,
-  RevealFx,
-  SpacingToken,
-} from "@once-ui-system/core";
+import { Background, Column, Flex, opacity, RevealFx, SpacingToken } from "@once-ui-system/core";
+import { Meta } from "@/components/seo";
 import { Footer, Header, RouteGuard, Providers } from "@/components";
 import { baseURL, effects, fonts, style, dataStyle, home, person } from "@/resources";
 

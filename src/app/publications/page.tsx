@@ -1,14 +1,5 @@
-import {
-  Button,
-  Card,
-  Column,
-  Heading,
-  Icon,
-  Meta,
-  Row,
-  Schema,
-  Text,
-} from "@once-ui-system/core";
+import { Button, Card, Column, Heading, Icon, Row, Text } from "@once-ui-system/core";
+import { Meta, Schema } from "@/components/seo";
 import { baseURL, about, person, publications } from "@/resources";
 
 const papers = [
@@ -40,7 +31,7 @@ export default function PublicationsPage() {
   return (
     <Column maxWidth="m" paddingTop="24" horizontal="center">
       <Schema
-        as="webPage"
+        as="collectionPage"
         baseURL={baseURL}
         path={publications.path}
         title={publications.title}

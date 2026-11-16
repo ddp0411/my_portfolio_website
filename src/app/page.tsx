@@ -1,15 +1,5 @@
-import {
-  Heading,
-  Text,
-  Button,
-  RevealFx,
-  Column,
-  Row,
-  IconButton,
-  SmartLink,
-  Schema,
-  Meta,
-} from "@once-ui-system/core";
+import { Heading, Text, Button, RevealFx, Column, Row, IconButton, SmartLink } from "@once-ui-system/core";
+import { Schema, Meta } from "@/components/seo";
 import { home, about, person, baseURL, social } from "@/resources";
 import { Mailchimp, Hero } from "@/components";
 import { Projects } from "@/components/work/Projects";
