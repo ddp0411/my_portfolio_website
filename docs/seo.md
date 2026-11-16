@@ -4,8 +4,16 @@ How the site is set up for search engines (Google, Bing) and AI answer engines
 (ChatGPT, Claude, Perplexity, Gemini, Google AI Overviews), and the manual steps
 that keep it indexed.
 
-Based on the [SEO + GEO tracker guide](https://vibha-ramprakash.github.io/seo-geo-tracker/).
 The code changes are in commit `568ecd4` ("Make pages crawlable and add SEO/GEO metadata").
+
+## Reference
+
+This setup follows the **SEO + GEO Autopilot** guide:
+
+https://vibha-ramprakash.github.io/seo-geo-tracker/
+
+The guide's loop is audit → diagnose → fix → re-audit. Its "Fixer" step produces
+the robots.txt rules, `llms.txt` and JSON-LD that are now in the code.
 
 ---
 
