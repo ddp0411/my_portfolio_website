@@ -103,7 +103,9 @@ function websiteSchema() {
     "@type": "WebSite",
     "@id": websiteId,
     url: base,
-    name: person.name,
+    // Google shows this as the site name above the result title.
+    name: `${person.firstName} ${person.lastName}`,
+    alternateName: [person.name, "devanshupatil.blog"],
     description: `Portfolio and blog of ${person.name}, ${person.role} in ${place.label}.`,
     inLanguage: person.locale ?? "en",
     publisher: { "@id": personId },

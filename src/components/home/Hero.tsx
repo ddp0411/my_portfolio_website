@@ -20,7 +20,7 @@ export function Hero() {
   return (
     <section className={styles.hero}>
       <div className={styles.figure}>
-        <img src="/images/hero/portrait.jpg" alt={person.name} fetchPriority="high" />
+        <img src="/images/hero/portrait.jpg" alt={`${person.firstName} ${person.lastName}, ${person.role} in Pune`} fetchPriority="high" />
       </div>
       <div className={styles.inner}>
         {home.featured.display && (

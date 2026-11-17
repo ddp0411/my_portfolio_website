@@ -15,12 +15,15 @@ const dotStyle: React.CSSProperties = {
   background: "var(--brand-background-strong)",
 };
 
+// Search-facing title. about.title stays as the shorter on-page and button label.
+const seoTitle = `About ${person.firstName} ${person.lastName} – ${person.role} in Pune`;
+
 export async function generateMetadata() {
   return Meta.generate({
-    title: about.title,
+    title: seoTitle,
     description: about.description,
     baseURL: baseURL,
-    image: `/api/og/generate?title=${encodeURIComponent(about.title)}`,
+    image: `/api/og/generate?title=${encodeURIComponent(seoTitle)}`,
     path: about.path,
   });
 }

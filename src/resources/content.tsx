@@ -59,8 +59,8 @@ const home: Home = {
   image: "/images/og/home.jpg",
   label: "Home",
   // Search result title (~60 chars) and snippet (~155 chars).
-  title: `${person.name} – ${person.role} & AI Developer, Pune`,
-  description: `${person.name} is a ${person.role} in Pune, India, building data pipelines, RAG systems and computer-vision projects with Python, SQL, AWS and Snowflake.`,
+  title: `${person.firstName} ${person.lastName} – ${person.role} & AI Developer, Pune`,
+  description: `${person.firstName} ${person.lastName} is a ${person.role} in Pune, India, building data pipelines, RAG systems and computer-vision projects with Python, SQL, AWS and Snowflake.`,
   headline: (
     <>
       Transforming data
@@ -83,7 +83,7 @@ const home: Home = {
   },
   subline: (
     <>
-      I'm {person.firstName}, a {person.role.toLowerCase()} who turns complex datasets into clear,
+      I'm {person.firstName} {person.lastName}, a {person.role.toLowerCase()} who turns complex datasets into clear,
       actionable insights — through machine learning, NLP, and generative AI, from data pipeline to
       deployed interface.
     </>
