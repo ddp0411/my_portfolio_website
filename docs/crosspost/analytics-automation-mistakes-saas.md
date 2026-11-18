@@ -3,14 +3,14 @@ title: "Four things I got wrong running analytics and automation for a SaaS"
 subtitle: "Every n8n run was green. None of the four mistakes threw an error."
 slug: "analytics-automation-mistakes-saas"
 date: 2026-11-18
-category: "Data Engineering"
+category: "Data Analytics"
 format: "short-opinion"
 reading_time: "4 min"
 canonical_url: "https://www.devanshupatil.blog/blog/analytics-automation-mistakes-saas"
 cover_image: "https://www.devanshupatil.blog/images/blog/analytics-automation/cover.jpg"
 cover_caption: "Green across the board. Not a single PDF."
-medium_topics: ["Data Engineering", "Automation", "n8n", "SQL", "Data Analytics"]
-devto_tags: ["dataengineering", "automation", "sql", "analytics"]
+medium_topics: ["Data Analytics", "Data Analysis", "Automation", "n8n", "SQL"]
+devto_tags: ["analytics", "automation", "sql", "n8n"]
 status: final
 # Medium: import from the live URL (medium.com/p/import) or paste the body below.
 # Medium has no tables, so "How each one hid" is a list here.
